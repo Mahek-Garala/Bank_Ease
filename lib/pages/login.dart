@@ -1,0 +1,197 @@
+import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class LoginPage extends StatefulWidget{
+  const LoginPage({super.key});
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage>{
+  final _formkey = GlobalKey<FormState>();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+
+  bool islogin = false;
+  //database
+  String ID = "";
+  String name = "";
+
+  Future<bool> verifyCustomer(String pin) async {
+    try {
+      print("in login ");
+     //fetch from database thru ID
+
+      if (true) {
+        //take storedPin from database
+        String storedPin = "123";
+        if (pin == storedPin) {
+          islogin = true;
+          return true; // PIN is correct
+        }
+        else{
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(
+            content: Text("Invalid PIN"),
+          ));
+        }
+
+      }
+      return false; // Customer not found or PIN is incorrect
+    } catch (e) {
+      print('Error verifying customer: $e');
+      return false; // Return false if there is an error
+    }
+  }
+  void loadData () async
+  {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    name = pref.getString('name')!;
+    ID = pref.getString('id')!;
+    print(name);
+    print(ID);
+
+  }
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Map<dynamic,dynamic> data = {}; //fill from argument passing
+
+
+  @override
+  Widget build(BuildContext context)
+  {
+    data = data.isEmpty ? ModalRoute.of(context)?.settings.arguments as Map :data;
+    print(data);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login'),
+        centerTitle: true,
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/blue2.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaY: 50.0 , sigmaX: 50.0),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    color: Colors.black,
+                    width: 3,
+                  ),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                shadowColor: Colors.black,
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Form(
+                    key: _formkey,
+                    child: OverflowBar(
+                      overflowSpacing: 20,
+                      children: [
+                        Text(
+                          "Welcome Mahek!",//name from database
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 25.0,
+                          ),
+                        ),
+                        Text(
+                          "Enter your pin to login",//name from database
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 21.0,
+                          ),
+                        ),
+                        TextFormField(
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 22.0,
+                          ),
+                          controller: _password,
+                          keyboardType: TextInputType.number,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'pin is empty';
+                            }
+                            return null;
+                          },
+                          decoration: const InputDecoration(hintText: "Pin"),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                              ),
+                              onPressed: () async {
+                                //authentication thru fingerprint
+                                bool auth = true ; //hardcoded
+                                print("can authenticate: $auth");
+                                if (auth) {
+                                  Navigator.pushReplacementNamed(
+                                      context, '/home',arguments: {'name' : data['name']});
+                                }
+                              },
+                              icon: Icon(Icons.fingerprint),
+                              label: Text(
+                                "Authenticate",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18.0,
+                                ),
+                              )),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 45,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                            ),
+                            onPressed: () async {
+                              if(_formkey.currentState!.validate())
+                                {
+                                  await verifyCustomer(_password.text);
+                                }
+                              if (islogin) {
+                                Navigator.pushReplacementNamed(
+                                    context, '/home',arguments: {'name' : data['name']});
+                              }
+                            },
+                            child: const Text(
+                              'Login',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
