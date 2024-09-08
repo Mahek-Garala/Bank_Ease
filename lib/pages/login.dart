@@ -2,6 +2,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localstorage/localstorage.dart';
+// import 'package:bank_ease/pages/authentication.dart';
+import 'package:local_auth/local_auth.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget{
@@ -19,6 +22,46 @@ class _LoginPageState extends State<LoginPage>{
   //database
   String ID = "";
   String name = "";
+  static final _auth = LocalAuthentication();// interact with the device's biometric authentication system.
+
+
+  static Future<bool> canAuthenticate() async =>
+      await _auth.canCheckBiometrics || await _auth.isDeviceSupported();
+
+  static Future<bool> authentication() async {
+    final List<BiometricType> availableBiometrics = await _auth.getAvailableBiometrics();
+
+    if (availableBiometrics.isNotEmpty) {
+      // Some biometrics are enrolled.
+    }
+
+    if (availableBiometrics.contains(BiometricType.strong) ||
+        availableBiometrics.contains(BiometricType.face)) {
+      // Specific types of biometrics are available.
+      // Use checks like this with caution!
+    }
+    print(availableBiometrics);
+
+    try {
+      final availableBiometrics = await _auth.getAvailableBiometrics();
+      print('Available biometrics: $availableBiometrics');
+      if (!await canAuthenticate()) return false;
+      return await _auth.authenticate(
+        localizedReason: "get into the app", //explaining why authentication is needed.
+        options: const AuthenticationOptions(
+          //Shows error dialog for system-related issues
+          useErrorDialogs: true,
+          //If true, auth dialog is show when app open from background
+          stickyAuth: true,
+          //Prevent non-biometric auth like such as pin, passcode.
+          biometricOnly: true,
+        ),
+      );
+    } catch (e) {
+      print('error $e');
+      return false;
+    }
+  }
 
   Future<bool> verifyCustomer(String pin) async {
     try {
@@ -46,8 +89,7 @@ class _LoginPageState extends State<LoginPage>{
       return false; // Return false if there is an error
     }
   }
-  void loadData () async
-  {
+  void loadData () async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     name = pref.getString('name')!;
     ID = pref.getString('id')!;
@@ -141,7 +183,7 @@ class _LoginPageState extends State<LoginPage>{
                               ),
                               onPressed: () async {
                                 //authentication thru fingerprint
-                                bool auth = true ; //hardcoded
+                                bool auth = await authentication(); //hardcoded
                                 print("can authenticate: $auth");
                                 if (auth) {
                                   Navigator.pushReplacementNamed(

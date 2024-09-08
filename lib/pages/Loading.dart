@@ -15,15 +15,13 @@ class _LoadingState extends State<Loading>{
   void redirectToLoginpage() async {
     print("hi");
     SharedPreferences pref = await SharedPreferences.getInstance();
-    //Navigator.pushReplacementNamed(context,'/sign_up');
-    print(pref);
-
+    Navigator.pushReplacementNamed(context,'/sign_up');
+    /*print(pref);
     String name1 = pref.getString('name') ?? '';
     print(name1);
     if (name1 == '') {
       //For firsting logging of any user in app
-      //pref.setString('name', 'devanshu');
-
+      //pref.setString('name', 'Mahek');
       Navigator.pushReplacementNamed(context, '/sign_up');
       //When we submit for account then pref.serString from database
     } else {
@@ -33,7 +31,7 @@ class _LoadingState extends State<Loading>{
       print(ID);
       Navigator.pushReplacementNamed(context, '/login_page',
           arguments: {'name': name1});
-    }
+    }*/
   }
 
   @override

@@ -80,7 +80,7 @@ class _SignupState extends State<Signup> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),
-          child:Form(
+          child:Form( //for validate and manage
             key: _formGlobalKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

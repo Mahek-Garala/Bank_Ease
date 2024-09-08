@@ -1,5 +1,7 @@
 package com.example.bank_ease
 
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 
-class MainActivity: FlutterActivity()
+class MainActivity: FlutterFragmentActivity() {
+    // No need to override configureFlutterEngine in recent versions of Flutter
+}

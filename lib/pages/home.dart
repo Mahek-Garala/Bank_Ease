@@ -34,7 +34,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context){
 
-
     return Scaffold(
       appBar: AppBar(
         title: Text('BankEase'),//bharat national bank
@@ -44,7 +43,7 @@ class _HomeState extends State<Home> {
             onPressed: ()async {
               //Customer customer = await fetchuserdata();
               //Navigator.pushNamed(context, '/profile', arguments: customer);
-              //Navigator.pushNamed(context, '/profile');
+              Navigator.pushNamed(context, '/profile');
             },
           ),
           IconButton(
@@ -100,7 +99,7 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(12.0),
               child: Card(
                 elevation: 5,
                 child: Column(
@@ -196,7 +195,7 @@ class _HomeState extends State<Home> {
                     //Navigator.pushNamed(context, '/scan_qr');
                   },
                   style: ElevatedButton.styleFrom(
-                    fixedSize: Size(218.0, 35.0),
+                    fixedSize: Size(200.0, 35.0),
                     backgroundColor: Colors.black,
                   ),
                   icon: Icon(Icons.qr_code_scanner),
@@ -221,7 +220,7 @@ class _HomeState extends State<Home> {
                 ),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    fixedSize: Size(218.0, 35.0),
+                    fixedSize: Size(200.0, 35.0),
                     backgroundColor: Colors.black,
                   ),
                   onPressed: () {

@@ -56,3 +56,15 @@ android {
 flutter {
     source = "../.."
 }
+//dependencies {
+//    implementation 'androidx.fragment:fragment:1.6.2'
+//    // other dependencies
+//}
+//dependencies {
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+//    implementation 'com.android.support:multidex:1.0.3'
+//    implementation "androidx.core:core-ktx:1.10.1"
+//    implementation 'androidx.fragment:fragment-ktx:1.5.7' // Make sure AndroidX is used
+//    implementation 'io.flutter:flutter_embedding_release:1.0.0' // Ensure Flutter dependencies
+//}
+
