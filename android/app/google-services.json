@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "894137056148",
+    "project_id": "bank-ease",
+    "storage_bucket": "bank-ease.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:894137056148:android:1997d4d3dc1083a32cad81",
+        "android_client_info": {
+          "package_name": "com.example.bank_ease"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrWC4j9d28zKoyeqYg_LsqAXUb0BWOSSM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:894137056148:android:8368324a895219802cad81",
+        "android_client_info": {
+          "package_name": "com.example.banking_application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrWC4j9d28zKoyeqYg_LsqAXUb0BWOSSM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
