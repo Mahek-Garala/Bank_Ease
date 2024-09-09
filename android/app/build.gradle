@@ -70,3 +70,4 @@ flutter {
 //    implementation 'androidx.fragment:fragment-ktx:1.5.7' // Make sure AndroidX is used
 //    implementation 'io.flutter:flutter_embedding_release:1.0.0' // Ensure Flutter dependencies
 //}
+
