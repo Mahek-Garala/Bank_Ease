@@ -1,19 +1,20 @@
 import 'dart:ui';
+import 'package:bank_ease/auth_method.dart';
+import 'package:bank_ease/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localstorage/localstorage.dart';
 // import 'package:bank_ease/pages/authentication.dart';
 import 'package:local_auth/local_auth.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginPage extends StatefulWidget{
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage>{
+class _LoginPageState extends State<LoginPage> {
   final _formkey = GlobalKey<FormState>();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
@@ -22,14 +23,16 @@ class _LoginPageState extends State<LoginPage>{
   //database
   String ID = "";
   String name = "";
-  static final _auth = LocalAuthentication();// interact with the device's biometric authentication system.
-
+  String storedPin = "";
+  static final _auth =
+  LocalAuthentication(); // interact with the device's biometric authentication system.
 
   static Future<bool> canAuthenticate() async =>
       await _auth.canCheckBiometrics || await _auth.isDeviceSupported();
 
   static Future<bool> authentication() async {
-    final List<BiometricType> availableBiometrics = await _auth.getAvailableBiometrics();
+    final List<BiometricType> availableBiometrics =
+    await _auth.getAvailableBiometrics();
 
     if (availableBiometrics.isNotEmpty) {
       // Some biometrics are enrolled.
@@ -47,7 +50,8 @@ class _LoginPageState extends State<LoginPage>{
       print('Available biometrics: $availableBiometrics');
       if (!await canAuthenticate()) return false;
       return await _auth.authenticate(
-        localizedReason: "get into the app", //explaining why authentication is needed.
+        localizedReason:
+        "get into the app", //explaining why authentication is needed.
         options: const AuthenticationOptions(
           //Shows error dialog for system-related issues
           useErrorDialogs: true,
@@ -65,53 +69,51 @@ class _LoginPageState extends State<LoginPage>{
 
   Future<bool> verifyCustomer(String pin) async {
     try {
-      print("in login ");
-     //fetch from database thru ID
+      //fetch from database thru ID
+      var customer = await AuthMethod().getCustomer(ID);
 
-      if (true) {
-        //take storedPin from database
-        String storedPin = "123";
-        if (pin == storedPin) {
+      if (customer != null) {
+        print(customer['mPIN']);
+        if (pin == customer['mPIN']) {
+
           islogin = true;
           return true; // PIN is correct
+        } else {
+          showSnackBar(context, "Invalid PIN");
         }
-        else{
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(
-            content: Text("Invalid PIN"),
-          ));
-        }
-
+        return false;
+      } else {
+        showSnackBar(context, "Customer not found");
       }
-      return false; // Customer not found or PIN is incorrect
+      return false;
     } catch (e) {
       print('Error verifying customer: $e');
       return false; // Return false if there is an error
     }
   }
-  void loadData () async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    name = pref.getString('name')!;
-    ID = pref.getString('id')!;
-    print(name);
-    print(ID);
 
+  void loadData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      name = pref.getString('name')!;
+    });
+    ID = pref.getString('id')!;
+    storedPin = pref.getString('pin')!;
   }
+
   @override
   void initState() {
     super.initState();
     loadData();
   }
 
-  Map<dynamic,dynamic> data = {}; //fill from argument passing
-
+  Map<dynamic, dynamic> data = {}; //fill from argument passing
 
   @override
-  Widget build(BuildContext context)
-  {
-    data = data.isEmpty ? ModalRoute.of(context)?.settings.arguments as Map :data;
+  Widget build(BuildContext context) {
+    data =
+    data.isEmpty ? ModalRoute.of(context)?.settings.arguments as Map : data;
     print(data);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
@@ -125,7 +127,7 @@ class _LoginPageState extends State<LoginPage>{
           ),
         ),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaY: 50.0 , sigmaX: 50.0),
+          filter: ImageFilter.blur(sigmaY: 50.0, sigmaX: 50.0),
           child: Center(
             child: Padding(
               padding: const EdgeInsets.all(10),
@@ -146,14 +148,14 @@ class _LoginPageState extends State<LoginPage>{
                       overflowSpacing: 20,
                       children: [
                         Text(
-                          "Welcome Mahek!",//name from database
+                          "Welcome $name", //name from database
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 25.0,
                           ),
                         ),
                         Text(
-                          "Enter your pin to login",//name from database
+                          "Enter your pin to login", //name from database
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 21.0,
@@ -187,7 +189,8 @@ class _LoginPageState extends State<LoginPage>{
                                 print("can authenticate: $auth");
                                 if (auth) {
                                   Navigator.pushReplacementNamed(
-                                      context, '/home',arguments: {'name' : data['name']});
+                                      context, '/home',
+                                      arguments: {'name': data['name']});
                                 }
                               },
                               icon: Icon(Icons.fingerprint),
@@ -207,13 +210,12 @@ class _LoginPageState extends State<LoginPage>{
                               backgroundColor: Colors.black,
                             ),
                             onPressed: () async {
-                              if(_formkey.currentState!.validate())
-                                {
-                                  await verifyCustomer(_password.text);
-                                }
+                              if (_formkey.currentState!.validate()) {
+                                await verifyCustomer(_password.text);
+                              }
                               if (islogin) {
-                                Navigator.pushReplacementNamed(
-                                    context, '/home',arguments: {'name' : data['name']});
+                                Navigator.pushReplacementNamed(context, '/home',
+                                    arguments: {'name': data['name']});
                               }
                             },
                             child: const Text(
