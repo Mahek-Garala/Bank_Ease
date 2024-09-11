@@ -6,7 +6,7 @@ import 'package:bank_ease/pages/login.dart';
 import 'package:bank_ease/pages/home.dart';
 import 'package:bank_ease/pages/profile.dart';
 import 'package:firebase_core/firebase_core.dart';
-//import 'firebase_options.dart';
+import 'firebase_options.dart';
 
 
 
@@ -22,6 +22,7 @@ void main() async{
   }
 
   runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes:{
         '/' : (context) => const Loading(),

@@ -24,25 +24,23 @@ class _LoginPageState extends State<LoginPage> {
   String ID = "";
   String name = "";
   String storedPin = "";
-  static final _auth =
-  LocalAuthentication(); // interact with the device's biometric authentication system.
+  static final _auth = LocalAuthentication(); // interact with the device's biometric authentication system.
 
   static Future<bool> canAuthenticate() async =>
       await _auth.canCheckBiometrics || await _auth.isDeviceSupported();
 
   static Future<bool> authentication() async {
-    final List<BiometricType> availableBiometrics =
-    await _auth.getAvailableBiometrics();
+    final List<BiometricType> availableBiometrics = await _auth.getAvailableBiometrics();
 
-    if (availableBiometrics.isNotEmpty) {
-      // Some biometrics are enrolled.
-    }
+    // if (availableBiometrics.isNotEmpty) {
+    //   // Some biometrics are enrolled.
+    // }
 
-    if (availableBiometrics.contains(BiometricType.strong) ||
-        availableBiometrics.contains(BiometricType.face)) {
-      // Specific types of biometrics are available.
-      // Use checks like this with caution!
-    }
+    // if (availableBiometrics.contains(BiometricType.strong) ||
+    //     availableBiometrics.contains(BiometricType.face)) {
+    //   // Specific types of biometrics are available.
+    //   // Use checks like this with caution!
+    // }
     print(availableBiometrics);
 
     try {

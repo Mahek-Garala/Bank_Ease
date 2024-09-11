@@ -25,8 +25,7 @@ class Customer {
     required this.url
   });
 
-  static Customer fromMap(DocumentSnapshot snap) {
-    Map<String, dynamic> map = snap.data() as Map<String, dynamic>;
+  static Customer fromMap(Map<String, dynamic> map) {
     return Customer(
       address: map['address'],
       dob: map['dob'],

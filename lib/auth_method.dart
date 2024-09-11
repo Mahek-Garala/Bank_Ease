@@ -1,7 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bank_ease/pages/signup.dart';
-import 'package:ba'
 
 
 class AuthMethod{
@@ -20,8 +19,7 @@ class AuthMethod{
     }
     return null;
   }
-  Future<Map<dynamic,dynamic>?> savepin(String customerId,String setpin) async
-  {
+  Future<Map<dynamic,dynamic>?> savepin(String customerId,String setpin) async {
     try{
       final QuerySnapshot<Object?> querySnapshot = await _firestore.collection('customers').where('customerID', isEqualTo: customerId).get();
       if (querySnapshot.docs.isNotEmpty) {

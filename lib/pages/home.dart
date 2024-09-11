@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bank_ease/models/customers.dart';
+import 'package:bank_ease/models/account.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,14 +17,37 @@ class _HomeState extends State<Home> {
   String account_holder = "";
   String account_no = "";
   String card_no = "";
+  Customer customer_info = Customer.nothing();
+  Account account_info = Account.nothing();
 
   void setvariables() async {
     super.initState();
     final pref = await SharedPreferences.getInstance();
     name1 = pref.getString('name') ?? '';
     CustId = pref.getString('id') ?? '';
-    // pref.setString('name', customerName);
-    // pref.setString('id', customerId);
+    //from database
+    CollectionReference customer = FirebaseFirestore.instance.collection('customers');
+    QuerySnapshot customerQuery = await customer
+        .where('customer_ID', isEqualTo: CustId)
+        .get();
+    final document = customerQuery.docs[0].data() as Map<String, dynamic>;
+    account_holder = (document)['name'];
+    customer_info = Customer.fromMap(document);
+    String documentId1 = customerQuery.docs[0].id;
+    print("Document ID1: $documentId1");
+
+    // first create "account" in firebase
+    CollectionReference account = FirebaseFirestore.instance.collection('accounts');
+    QuerySnapshot accountQuery = await account
+        .where('customer_ID', isEqualTo: CustId)
+        .get();
+    String documentId = accountQuery.docs[0].id;
+
+    final document1 = accountQuery.docs[0].data() as Map;
+    account_info = Account.fromMap(document1);
+    print("Document ID: $documentId");
+    print(document1);
+
 
   }
 
@@ -31,6 +57,15 @@ class _HomeState extends State<Home> {
   }
   bool isAccountDetailsExpanded = false;
 
+  Future<Customer> fetchuserdata() async {
+    CollectionReference customer = FirebaseFirestore.instance.collection('customers');
+    QuerySnapshot customerQuery = await customer
+        .where('customer_ID', isEqualTo: CustId)
+        .get();
+    final document = customerQuery.docs[0].data() as Map<String,dynamic>;
+    final data = Customer.fromMap(document);
+    return data;
+  }
   @override
   Widget build(BuildContext context){
 
@@ -41,9 +76,9 @@ class _HomeState extends State<Home> {
           IconButton(
             icon: Icon(Icons.account_circle_outlined),
             onPressed: ()async {
-              //Customer customer = await fetchuserdata();
-              //Navigator.pushNamed(context, '/profile', arguments: customer);
-              Navigator.pushNamed(context, '/profile');
+              Customer customer = await fetchuserdata();
+              Navigator.pushNamed(context, '/profile', arguments: customer);
+              //Navigator.pushNamed(context, '/profile');
             },
           ),
           IconButton(
@@ -63,7 +98,7 @@ class _HomeState extends State<Home> {
                   color: Colors.blue,
                 ),
                 child: Text(
-                  'Bharat National Bank',
+                  'Bank_Ease(Bharat Nation bank)',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -146,25 +181,25 @@ class _HomeState extends State<Home> {
                               leading: Icon(Icons.account_circle),
                               title: Text('Account Holder'),
                               //subtitle: Text(customer_info.name.toString()),
-                              subtitle: Text("Mahek Garala"),
+                              subtitle: Text(customer_info.name.toString()),
                             ),
                             ListTile(
                               leading: Icon(Icons.account_balance),
                               title: Text('Account Number'),
                               //subtitle: Text(account_info.account_no.toString()),
-                              subtitle: Text("123456789"),
+                              subtitle: Text(account_info.account_no.toString()),
                             ),
                             ListTile(
                               leading: Icon(Icons.credit_card),
                               title: Text('Card Number'),
                               //subtitle: Text(account_info.debit_card_no.toString()),
-                              subtitle: Text("1400025000"),
+                              subtitle: Text(account_info.debit_card_no.toString()),
                             ),
                             ListTile(
                               leading: Icon(Icons.currency_rupee_rounded),
                               title: Text('Balance'),
                               //subtitle: Text(account_info.balance.toString()),
-                              subtitle: Text("20/-"),
+                              subtitle: Text(account_info.balance.toString()),
                             ),
                           ],
                         ),

@@ -25,9 +25,7 @@ class _SignupState extends State<Signup> {
   TextEditingController confirmsetpinController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController customerIdController = TextEditingController();
-  //EmailOTP myauth = EmailOTP();
-  //AuthHandler authHandler = AuthHandler();
-  //bool submitValid = false;
+
   final _formKey = GlobalKey<FormState>();
   Future <String?> loginCustomer(String customerId) async {
     try{
@@ -56,61 +54,9 @@ class _SignupState extends State<Signup> {
         showSnackBar(context, "Customer not Found..");
       }
     }catch(e){
-
+      print(e.toString());
     }
   }
-  /*void sendOTP(String email) async {
-
-    print("in otp, otp is sending");
-    // Implement OTP sending logic here
-    myauth.setConfig(
-        appEmail: "bharatnationalbank@gmail.com",
-        appName: "BHARAT NATIONAL BANK",
-        userEmail: email,
-        otpLength: 4,
-        otpType: OTPType.digitsOnly
-    );
-
-    //print("otp send verifying");
-    //myauth.sendOTP();
-    print("otp send");
-    /*if (await myauth.sendOTP() == true) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(
-        content: Text("OTP has been sent"),
-      ));
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(
-        content: Text("Oops, OTP send failed"),
-      ));
-    }*/
-
-    setState(() {
-      showOtpField = true;
-    });
-
-  }*/
-
-  /*void verifyOTP() async {
-    if (await myauth.verifyOTP(otp: otpverifyController.text) == true) {
-      verifyOtpField = true;
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(
-    content: Text("OTP is verified"),
-    ));
-    } else {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(
-    content: Text("Invalid OTP"),
-    ));
-    }
-
-    setState(() {
-
-    });
-  }*/
-
 
   @override
   void dispose() {
@@ -157,8 +103,7 @@ class _SignupState extends State<Signup> {
                   controller: emailController,
                   decoration: InputDecoration(labelText: 'Email'),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Email is required';
+                    if (value == null || value.isEmpty) {return 'Email is required';
                     }
                     // Add more complex email validation logic here if needed
                     return null;
@@ -187,9 +132,6 @@ class _SignupState extends State<Signup> {
                         setState(() {
                           verifyOtpField = true;
                         });
-
-
-                        //authHandler.sendOtp(emailController.text);
                       } else {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
@@ -203,44 +145,6 @@ class _SignupState extends State<Signup> {
                   child: Text("Set PIN"),
                 ),
                 SizedBox(height: 16.0),
-                /*if (showOtpField)
-                  TextFormField(
-                    controller: otpverifyController,
-                    decoration: InputDecoration(labelText: 'Enter OTP'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'OTP is required';
-                      }
-                      // Add OTP format validation here if needed
-                      return null;
-                    },
-                  ),
-                SizedBox(
-                  height: 16,
-                ),
-                if (showOtpField)
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-
-                      backgroundColor: Colors.black,
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Form is valid, proceed with verification and signup
-                        if (!verifyOtpField) {
-                          //verifyOTP();
-                          authHandler.verifyOtp(otpController.text);
-                        } else {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Oops, OTP is incorrect"),
-                          ));
-                          // Implement OTP verification and signup logic here
-                        }
-                      }
-                    },
-                    child: Text("Verify OTP"),
-                  ),*/
                 SizedBox(height: 16.0),
                 if (verifyOtpField)
                   TextFormField(
