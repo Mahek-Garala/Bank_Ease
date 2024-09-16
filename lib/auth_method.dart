@@ -19,6 +19,24 @@ class AuthMethod{
     }
     return null;
   }
+  void setData(String customerId,String email, int mobileNo,String address) async{
+    try {
+      final QuerySnapshot<Object?> querySnapshot = await _firestore.collection(
+          'customers').where('customerID', isEqualTo: customerId).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        final DocumentReference documentRef = querySnapshot.docs[0].reference;
+        final customer = querySnapshot.docs[0].data();
+        await documentRef.update({
+          'email': email,
+          'mobileNo': mobileNo,
+          'address': address
+        });
+      }
+    }catch(error){
+      print(error.toString());
+    }
+
+  }
   Future<Map<dynamic,dynamic>?> savepin(String customerId,String setpin) async {
     try{
       final QuerySnapshot<Object?> querySnapshot = await _firestore.collection('customers').where('customerID', isEqualTo: customerId).get();

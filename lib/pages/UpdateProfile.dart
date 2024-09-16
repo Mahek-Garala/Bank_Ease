@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bank_ease/auth_method.dart';
 
 class UpdateProfilePage extends StatefulWidget {
   @override
@@ -10,6 +11,20 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
+
+  String customerId = "";
+  void loadData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      customerId = pref.getString('id')!;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +62,10 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                 String updatedMobile = _mobileController.text;
                 String updatedAddress = _addressController.text;
 
+                int Updatedmobile = int.parse(updatedMobile);
+
                 if (updatedEmail.isNotEmpty || updatedMobile.isNotEmpty || updatedAddress.isNotEmpty) {
-                  // Show a confirmation dialog
+                  AuthMethod().setData(customerId, updatedEmail,Updatedmobile, updatedAddress);
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
