@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
     //from database
     CollectionReference customer = FirebaseFirestore.instance.collection('customers');
     QuerySnapshot customerQuery = await customer
-        .where('customer_ID', isEqualTo: CustId)
+        .where('customerID', isEqualTo: CustId)
         .get();
     final document = customerQuery.docs[0].data() as Map<String, dynamic>;
     account_holder = (document)['name'];
@@ -60,7 +60,7 @@ class _HomeState extends State<Home> {
   Future<Customer> fetchuserdata() async {
     CollectionReference customer = FirebaseFirestore.instance.collection('customers');
     QuerySnapshot customerQuery = await customer
-        .where('customer_ID', isEqualTo: CustId)
+        .where('customerID', isEqualTo: CustId)
         .get();
     final document = customerQuery.docs[0].data() as Map<String,dynamic>;
     final data = Customer.fromMap(document);
@@ -215,7 +215,7 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 ElevatedButton.icon(
                   onPressed: () {
-                    //Navigator.pushNamed(context, '/genrate_qr');
+                    Navigator.pushNamed(context, '/genrate_qr');
                     // Add transfer money functionality here
                   },
                   style: ElevatedButton.styleFrom(
@@ -227,7 +227,7 @@ class _HomeState extends State<Home> {
                 ),
                 ElevatedButton.icon(
                   onPressed: () {
-                    //Navigator.pushNamed(context, '/scan_qr');
+                    Navigator.pushNamed(context, '/scan_qr');
                   },
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(200.0, 35.0),
@@ -259,7 +259,7 @@ class _HomeState extends State<Home> {
                     backgroundColor: Colors.black,
                   ),
                   onPressed: () {
-                    //Navigator.pushNamed(context, '/transactionHistory');
+                    Navigator.pushNamed(context, '/transactionHistory');
                   },
                   icon: Icon(Icons.history),
                   label: Text('Transaction History'),

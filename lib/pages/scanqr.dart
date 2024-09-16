@@ -1,3 +1,15 @@
+// Relationship Between the Code and Stages:
+// Stage 1: Scanning the QR Code:
+
+// The current code handles the process of scanning a QR code. It displays instructions and the camera feed, uses the MobileScanner to detect QR codes, and overlays the QRScannerOverlay to highlight the scan area. This is the input stage of the payment process, where the user is scanning a QR code.
+// Stage 2: Processing the QR Code Data:
+
+// Once the QR code is scanned, the app extracts the QR data and navigates to the payment processing stage (QRPayment screen). This second part is the payment handling after the QR code has been scanned. The scanned data (likely containing payment details) is passed to the next page, where the payment logic will be implemented.
+
+// Scanqr Widget: Provides the interface for scanning QR codes and displays an overlay using the MobileScanner.
+// QRScannerOverlay: Custom overlay used for enhancing user experience by guiding them to the correct scanning area.
+// QR Code Detection: After detecting the QR code, the app navigates to the payment page (/qr_payment), passing the QR code data for further processing.
+
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -56,9 +68,6 @@ class _ScanqrState extends State<Scanqr> {
                 )),
             Expanded(
               flex: 4,
-              /*child: Container(
-                   color : Colors.green,
-                  ),*/
 
               child: Stack(
                   children: [
@@ -79,7 +88,7 @@ class _ScanqrState extends State<Scanqr> {
                           if (barcodes.isNotEmpty) {
                             // Assuming you want to use the first detected barcode
                             qrCodeData = barcodes.first.rawValue;
-
+                            print(qrCodeData);
                             // Navigate to the QRPayment page and pass the scanned QR code data
 
                             isScanCompleted = false;
@@ -87,7 +96,6 @@ class _ScanqrState extends State<Scanqr> {
                               'qrCodeData' : qrCodeData
                             });
                             isScanCompleted = true;
-                            //Navigator.push(context,MaterialPageRoute(builder: (context) => QRPayment()));/**/ // '/qr_payment',{code: code});
                           }
                         }
                       },
@@ -109,16 +117,3 @@ class _ScanqrState extends State<Scanqr> {
 }
 
 
-// Relationship Between the Code and Stages:
-// Stage 1: Scanning the QR Code:
-
-// The current code handles the process of scanning a QR code. It displays instructions and the camera feed, uses the MobileScanner to detect QR codes, and overlays the QRScannerOverlay to highlight the scan area. This is the input stage of the payment process, where the user is scanning a QR code.
-// Stage 2: Processing the QR Code Data:
-
-// Once the QR code is scanned, the app extracts the QR data and navigates to the payment processing stage (QRPayment screen). This second part is the payment handling after the QR code has been scanned. The scanned data (likely containing payment details) is passed to the next page, where the payment logic will be implemented.
-
-
-
-// Scanqr Widget: Provides the interface for scanning QR codes and displays an overlay using the MobileScanner.
-// QRScannerOverlay: Custom overlay used for enhancing user experience by guiding them to the correct scanning area.
-// QR Code Detection: After detecting the QR code, the app navigates to the payment page (/qr_payment), passing the QR code data for further processing.

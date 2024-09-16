@@ -43,13 +43,19 @@ class _GenerateQRCodeState extends State<GenerateQRCode> {
 
     CollectionReference customer = FirebaseFirestore.instance.collection('customers');
     QuerySnapshot customerQuery = await customer
-        .where('customer_ID', isEqualTo: CustId)
+        .where('customerID', isEqualTo: CustId)
         .get();
-    final document = customerQuery.docs[0].data() as Map<String,dynamic>;
-    account_holder = (document)['name'];
-    customer_info = Customer.fromMap(document);
-    String documentId1 = customerQuery.docs[0].id;
-    print("Document ID1: $documentId1");
+    if(customerQuery.docs.isNotEmpty){
+      final document = customerQuery.docs[0].data() as Map<String,dynamic>;
+      account_holder = (document)['name'];
+      customer_info = Customer.fromMap(document);
+      String documentId1 = customerQuery.docs[0].id;
+      print("Document ID1: $documentId1");
+    }else{
+      print("No customer found with the provided CustId: $CustId");
+      account_holder = "Unknown"; // Or set a default value
+    }
+
 
     // pref.setString('name', customerName);
     // pref.setString('id', customerId);
@@ -65,15 +71,9 @@ class _GenerateQRCodeState extends State<GenerateQRCode> {
 
   @override
   Widget build(BuildContext context)  {
-    /*String customerInfo = '''
-      Id ${customer.customerID}
-    ''';
-    */
-    //initState();
-    //1setvariables();
     return Scaffold(
       appBar: AppBar(
-        title: Text(""+account_holder+"'s QR Code",
+        title: Text("$account_holder's QR Code",
           style: TextStyle(
             fontSize: 23,
             fontWeight: FontWeight.bold,
@@ -95,7 +95,7 @@ class _GenerateQRCodeState extends State<GenerateQRCode> {
               ),
             ),
             SizedBox(height: 10.0),
-            Text('Mr. '+ account_holder,
+            Text(account_holder,
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 24,
@@ -135,11 +135,6 @@ class _GenerateQRCodeState extends State<GenerateQRCode> {
               ),
             ),
             SizedBox(height: 30.0),
-            /*Text('Scan this QR code to view account details'),
-            SizedBox(height: 20.0),*/
-            //Text("Cust id"),
-            //Text(custId),
-            /**/
           ],
         ),
       ),

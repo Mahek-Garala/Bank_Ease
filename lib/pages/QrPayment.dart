@@ -9,7 +9,6 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-//import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:bank_ease/models/customers.dart';
 import 'package:bank_ease/models/account.dart';
@@ -19,20 +18,12 @@ import 'package:bank_ease/pages/scanqr.dart';
 late final String code;
 
 class QRPayment extends StatefulWidget {
-
-
-  //final String? qrData;
-  //const QRPayment({required this.qrData, Key? key}) : super(key: key);
   QRPayment({super.key});
   @override
   State<QRPayment> createState() => _QRPaymentState();
 }
 
 class _QRPaymentState extends State<QRPayment> {
-
-  /*late final String code;
-  late final Function() closescreen;
-  */
   final TextEditingController _amount = TextEditingController();
   final TextEditingController _remark = TextEditingController();
 
@@ -62,10 +53,6 @@ class _QRPaymentState extends State<QRPayment> {
   }
 
   Future<void> setvariables() async {
-    //super.initState();
-    //super.initState();
-
-    //Data = Data.isEmpty ? {'qrCodeData':"111111"} :  ModalRoute.of(context)?.settings.arguments as Map; //: {'qrCodeData':"111111"};
     Data =  ModalRoute.of(context)?.settings.arguments as Map; //{'qrCodeData':"111111"};
     print(Data);
     QrData = Data['qrCodeData'];
@@ -73,68 +60,54 @@ class _QRPaymentState extends State<QRPayment> {
     final pref = await SharedPreferences.getInstance();
     name1 = pref.getString('name') ?? '';
     CustId = pref.getString('id') ?? '';
-    // pref.setString('name', customerName);
-    // pref.setString('id', customerId);
 
-    //CustId = '111112';
-
-
+  //qrcode jeno hoi tenu name "account_holder" ma
     CollectionReference customer = FirebaseFirestore.instance.collection('customers');
     QuerySnapshot customerQuery = await customer
-        .where('customer_ID', isEqualTo: QrData)
+        .where('customerID', isEqualTo: QrData)
         .get();
     final document = customerQuery.docs[0].data() as Map<String,dynamic>;
     account_holder = (document)['name'];
     print(account_holder);
+    customer_info = Customer.fromMap(document);
+    print(document);
 
+    //qrcode jeno hoi tena account ni info "account_info" ma
     CollectionReference account = FirebaseFirestore.instance.collection('accounts');
     QuerySnapshot accountQuery = await account
         .where('customer_ID', isEqualTo: QrData)
         .get();
-    customer_info = Customer.fromMap(document);
-
-    print(document);
     final document1 = accountQuery.docs[0].data() as Map<dynamic,dynamic>;
     account_info = Account.fromMap(document1);
     print(document1);
 
-    print("1");
+    //jene scan karyo hase (current user) teni details "current_customer_info" ma
     CollectionReference current_customer = FirebaseFirestore.instance.collection('customers');
     QuerySnapshot current_customerQuery = await current_customer
-        .where('customer_ID', isEqualTo: CustId)
+        .where('customerID', isEqualTo: CustId)
         .get();
-
     final document2 = current_customerQuery.docs[0].data() as Map<String,dynamic>;
     current_customer_info = Customer.fromMap(document2);
-
     print(document2);
 
-    print("2");
+    //jene scan karyo hase (current user) teni account details "current_account_info" ma
     CollectionReference current_account = FirebaseFirestore.instance.collection('accounts');
     QuerySnapshot current_accountQuery = await current_account
         .where('customer_ID', isEqualTo: CustId)
         .get();
-
     print(current_accountQuery.docs);
-    print("heell");
     final document3 = current_accountQuery.docs[0].data() as Map<dynamic,dynamic>;
     current_account_info = Account.fromMap(document3);
-
     print(document3);
-    print("3");
   }
 
   void VerifyAmount() async
   {
-    print("hu");
     int am = int.parse(_amount.text) ;
     print(am);
-    print("balance : ");
-    print(current_account_info.balance);
     int? curr_am = current_account_info.balance;
     print("amount");
     print(_amount.text);
-
     print("balance : ");
     print(current_account_info.balance);
 
@@ -142,7 +115,7 @@ class _QRPaymentState extends State<QRPayment> {
     {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(
-        content: Text("Input valid amount."),
+        content: Text("Enter valid amount."),
       ));
     }
     else{
@@ -154,9 +127,7 @@ class _QRPaymentState extends State<QRPayment> {
   void initState() {
     super.initState();
     super.initState();
-    /*setvariables().then((_) {
-      setState(() {}); // Trigger a rebuild after setting variables
-    });*/
+
   }
 
   //String data = qrData;
@@ -186,7 +157,7 @@ class _QRPaymentState extends State<QRPayment> {
                   ),
                 ),
                 SizedBox(height: 75,),
-                Text('Pay to Mr.' + account_holder,
+                Text('Pay to $account_holder',
                   style: TextStyle(
                     color: Colors.black87,
                     fontSize: 22,
@@ -274,7 +245,7 @@ class _QRPaymentState extends State<QRPayment> {
 
                       if(isAmountValid)
                       {
-                       // Navigator.pushNamed(context, '/qr_pay',arguments: {'amount' : _amount.text,'remark' : _remark.text,'reciver_Cust' : QrData });
+                        Navigator.pushNamed(context, '/qr_pay',arguments: {'amount' : _amount.text,'remark' : _remark.text,'reciver_Cust' : QrData });
                       }
                     },
                     child: const Text(
@@ -286,36 +257,7 @@ class _QRPaymentState extends State<QRPayment> {
                     ),
                   ),
                 ),
-                /*QrImageView(
-                  data : QrData,
-                  version: QrVersions.auto,
-                  size: 150.0,
-                ),
-                Text('Scanned Result',
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1,
-                  ),
-                ),
-                SizedBox(height: 10,),
-                Text(QrData,
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 18,
-                    letterSpacing: 1,
-                  ),
-                ),
-                SizedBox(height: 10,),
-                Text('Scanned Completed',
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1,
-                  ),
-                ),*/
+
               ],
             ),
           ),

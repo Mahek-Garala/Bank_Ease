@@ -32,15 +32,15 @@ class _LoginPageState extends State<LoginPage> {
   static Future<bool> authentication() async {
     final List<BiometricType> availableBiometrics = await _auth.getAvailableBiometrics();
 
-    // if (availableBiometrics.isNotEmpty) {
-    //   // Some biometrics are enrolled.
-    // }
+    if (availableBiometrics.isNotEmpty) {
+      // Some biometrics are enrolled.
+    }
 
-    // if (availableBiometrics.contains(BiometricType.strong) ||
-    //     availableBiometrics.contains(BiometricType.face)) {
-    //   // Specific types of biometrics are available.
-    //   // Use checks like this with caution!
-    // }
+    if (availableBiometrics.contains(BiometricType.strong) ||
+        availableBiometrics.contains(BiometricType.face)) {
+      // Specific types of biometrics are available.
+      // Use checks like this with caution!
+    }
     print(availableBiometrics);
 
     try {

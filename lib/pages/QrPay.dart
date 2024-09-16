@@ -5,8 +5,6 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-//import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:bank_ease/models/customers.dart';
 import 'package:bank_ease/models/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,12 +51,9 @@ class _QrPayState extends State<QrPay> {
 
   Future<void> setVariables() async
   {
-    //setVariables();
-    //super.initState();
     Data = ModalRoute.of(context)?.settings.arguments as Map;
     print(Data);
     print(Data.isEmpty);
-    //Data = Data.isEmpty ? {'reciver_Cust':"111111" , 'amount' : "0"} :  ModalRoute.of(context)?.settings.arguments as Map; //: {'qrCodeData':"111111"};
 
     amount = Data['amount'];
     reciver_Cust = Data['reciver_Cust'];
@@ -67,56 +62,45 @@ class _QrPayState extends State<QrPay> {
     final pref = await SharedPreferences.getInstance();
     name1 = pref.getString('name') ?? '';
     CustId = pref.getString('id') ?? '';
-    // pref.setString('name', customerName);
-    // pref.setString('id', customerId);
 
-    //CustId = '111112';
+    //jeno qrcode hoi tenu name
     CollectionReference customer = FirebaseFirestore.instance.collection('customers');
     QuerySnapshot customerQuery = await customer
-        .where('customer_ID', isEqualTo: reciver_Cust)
+        .where('customerID', isEqualTo: reciver_Cust)
         .get();
     final document = customerQuery.docs[0].data() as Map<String,dynamic>;
     account_holder = (document)['name'];
     print(account_holder);
+    customer_info = Customer.fromMap(document);
+    print(document);
 
+    //jeno qr code hoi teni account details
     CollectionReference account = FirebaseFirestore.instance.collection('accounts');
     QuerySnapshot accountQuery = await account
         .where('customer_ID', isEqualTo: reciver_Cust)
         .get();
-    customer_info = Customer.fromMap(document);
-
-    print(document);
     final document1 = accountQuery.docs[0].data() as Map<dynamic,dynamic>;
     account_info = Account.fromMap(document1);
     print(document1);
 
-    //print("1");
+    //jene scan karyo(current user) teni info
     CollectionReference current_customer = FirebaseFirestore.instance.collection('customers');
     QuerySnapshot current_customerQuery = await current_customer
-        .where('customer_ID', isEqualTo: CustId)
+        .where('customerID', isEqualTo: CustId)
         .get();
-
     final document2 = current_customerQuery.docs[0].data() as Map<String,dynamic>;
     current_customer_info = Customer.fromMap(document2);
-
     print(document2);
 
-    //print("2");
+    //jene scan karyo(current user) tena account ni info
     CollectionReference current_account = FirebaseFirestore.instance.collection('accounts');
     QuerySnapshot current_accountQuery = await current_account
         .where('customer_ID', isEqualTo: CustId)
         .get();
-
-    print(current_accountQuery.docs);
-    print("heell");
     final document3 = current_accountQuery.docs[0].data() as Map<dynamic,dynamic>;
     current_account_info = Account.fromMap(document3);
-
     print(document3);
-    // print("3");
 
-
-    //setState(() {});
   }
 
   Future<void> handlesubmit(String senderAccount, String receiverAccount,
@@ -146,17 +130,18 @@ class _QrPayState extends State<QrPay> {
     final parsedAmount = int.parse(amount);
     final parsedpin = int.parse(transactionPin);
     DateTime now = new DateTime.now();
-    CollectionReference account =
-    FirebaseFirestore.instance.collection('accounts');
 
-    QuerySnapshot sender_account =
-    await account.where('account_no', isEqualTo: senderAccount).get();
+
+    CollectionReference account = FirebaseFirestore.instance.collection('accounts');
+    QuerySnapshot sender_account = await account.where('account_no', isEqualTo: senderAccount).get();
     if (sender_account.docs.isNotEmpty) {
       final document = sender_account.docs[0].data();
       final pin = (document as Map)['transaction_pin'];
       if (pin == parsedpin) {
-        CollectionReference transaction =
-        FirebaseFirestore.instance.collection('transaction');
+        // "CollectionReference" Refers to multiple documents.
+        // Can create new documents, query existing documents, and list all documents.
+        // Can reference a document inside it via doc().
+        CollectionReference transaction = FirebaseFirestore.instance.collection('transaction');
         await transaction.add({
           'sender_account_no': senderAccount,
           'receiver_account_no': receiverAccount,
@@ -164,13 +149,19 @@ class _QrPayState extends State<QrPay> {
           'remarks': remark,
           'date': now
         }).then((value) => print("Added Data"));
+
+        //sender na acc mathi minus
+
+        // "DocumentReference" Refers to a single document.
+        // Can be used to read, update, delete, or set data on that specific document.
+        // Can reference its parent collection using parent (if needed).
         final DocumentReference sender_doc = sender_account.docs[0].reference;
         final bal = (document as Map)['balance'];
         final rem_bal = bal - parsedAmount;
-
         await sender_doc.update({'balance': rem_bal});
-        QuerySnapshot receiver =
-        await account.where('account_no', isEqualTo: receiverAccount).get();
+
+        //receiver na acc ma plus
+        QuerySnapshot receiver = await account.where('account_no', isEqualTo: receiverAccount).get();
         final DocumentReference receiver_doc = receiver.docs[0].reference;
         final receiver_doc_data = receiver.docs[0].data();
         final receiver_bal = (receiver_doc_data as Map)['balance'];
@@ -186,9 +177,8 @@ class _QrPayState extends State<QrPay> {
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    //Navigator.pushNamed(context, '/profile');
-                    //Navigator.of(context).pop();
-                  //  Navigator.pushReplacementNamed(context, '/transactionHistory');
+                    Navigator.of(context).pop();
+                    Navigator.pushReplacementNamed(context, '/transactionHistory');
                   },
                   child: Text('OK'),
                 ),
@@ -199,7 +189,6 @@ class _QrPayState extends State<QrPay> {
       }
       else {
         setState(() {
-          // pinValidationMessage = "PIN is Incorrect";
           showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -222,20 +211,6 @@ class _QrPayState extends State<QrPay> {
     }
   }
 
-  /*@override
-  void initState() {
-
-    super.initState();
-    /*setVariables().then((_) {
-      setState(() {}); // Trigger a rebuild after setting variables
-    });*/
-    /*Data = ModalRoute.of(context)?.settings.arguments as Map;
-    print(Data.isEmpty);
-    Data = Data.isEmpty ? {'reciver_Cust':"111111" , 'amount' : "0"} :  ModalRoute.of(context)?.settings.arguments as Map; //: {'qrCodeData':"111111"};
-
-    amount = Data['amount'];
-    reciver_Cust = Data['reciver_Cust'];*/
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -249,7 +224,6 @@ class _QrPayState extends State<QrPay> {
             child: Container(
               alignment: Alignment.topCenter,
               child: Column(
-                //mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(height: 120,),
                   Text('Bharat National Bank',
@@ -261,7 +235,7 @@ class _QrPayState extends State<QrPay> {
                     ),
                   ),
                   SizedBox(height: 75,),
-                  Text('Pay to Mr.' + account_holder,
+                  Text('Pay to ' + account_holder,
                     style: TextStyle(
                       color: Colors.black87,
                       fontSize: 22,
@@ -311,30 +285,19 @@ class _QrPayState extends State<QrPay> {
                       onPressed: () async{
                         String senderAccount = current_account_info.account_no.toString();
                         String receiverAccount = account_info.account_no.toString();
-                        /*String amount = amount;
-                      String remark = Remark;*/
                         String transactionPin = _pin.text;
 
                         // Add your transaction logic here
                         await handlesubmit(senderAccount, receiverAccount,
                             amount, Remark, transactionPin);
 
-                        // Print the input values for testing
                         print("Sender's Account: $senderAccount");
                         print("Receiver's Account: $receiverAccount");
                         print("Amount: $amount");
                         print("Remark: $Remark");
                         print("Transaction PIN: $transactionPin");
 
-                        /*print(_amount.text);
 
-                      VerifyAmount();
-
-                      if(isAmountValid)
-                      {
-                        Navigator.pushNamed(
-                            context, '/qr_pay',arguments: {'amount' : _amount.text,'reciver_Cust' : QrData });
-                      }*/
                       },
                       child: const Text(
                         'Pay',
