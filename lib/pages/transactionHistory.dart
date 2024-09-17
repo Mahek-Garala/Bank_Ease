@@ -90,7 +90,7 @@ class _transactionHistoryState extends State<transactionHistory> {
                   padding: EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
-                    border: Border.all(color: Colors.grey),
+                    border: Border.all(color: Colors.blueAccent),
                   ),
                   child: ListTile(
                     title: Text(

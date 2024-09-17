@@ -253,7 +253,7 @@ class _QrPayState extends State<QrPay> {
                     ),
                   ),
                   SizedBox(height: 20,),
-                  Text('Enter 4 - digit pin',
+                  Text('Enter 4-digit pin :',
                     style: TextStyle(
                       color: Colors.black87,
                       fontSize: 22,
@@ -267,7 +267,7 @@ class _QrPayState extends State<QrPay> {
                       style: TextStyle(
                         color: Colors.black87,
                         fontSize: 22,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                         letterSpacing: 1,
                       ),
                       controller: _pin,
@@ -276,38 +276,41 @@ class _QrPayState extends State<QrPay> {
                   ),
                   SizedBox(height: 50,),
                   SizedBox(
-                    width: double.infinity,
-                    height: 45,
+                    width: 180,
+                    height: 60,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
+                        side: BorderSide(color: Colors.blueAccent, width: 2.5),  // Blue accent border
+                        elevation: 5,  // Elevation for shadow effect
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),  // Border radius similar to previous style
+                        ),
                       ),
-                      onPressed: () async{
+                      onPressed: () async {
                         String senderAccount = current_account_info.account_no.toString();
                         String receiverAccount = account_info.account_no.toString();
                         String transactionPin = _pin.text;
 
                         // Add your transaction logic here
-                        await handlesubmit(senderAccount, receiverAccount,
-                            amount, Remark, transactionPin);
+                        await handlesubmit(senderAccount, receiverAccount, amount, Remark, transactionPin);
 
                         print("Sender's Account: $senderAccount");
                         print("Receiver's Account: $receiverAccount");
                         print("Amount: $amount");
                         print("Remark: $Remark");
                         print("Transaction PIN: $transactionPin");
-
-
                       },
                       child: const Text(
                         'Pay',
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
-                          fontSize: 16.0,
+                          fontSize: 22.0,
+                          color: Colors.black,  // White text color for better contrast
                         ),
                       ),
                     ),
                   ),
+
                 ],
               ),
             ),

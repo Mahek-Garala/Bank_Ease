@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bank_ease/models/customers.dart';
@@ -12,7 +13,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String name1="";
+  String name1 = "";
   String CustId = "";
   String account_holder = "";
   String account_no = "";
@@ -25,64 +26,51 @@ class _HomeState extends State<Home> {
     final pref = await SharedPreferences.getInstance();
     name1 = pref.getString('name') ?? '';
     CustId = pref.getString('id') ?? '';
-    //from database
     CollectionReference customer = FirebaseFirestore.instance.collection('customers');
-    QuerySnapshot customerQuery = await customer
-        .where('customerID', isEqualTo: CustId)
-        .get();
+    QuerySnapshot customerQuery = await customer.where('customerID', isEqualTo: CustId).get();
     final document = customerQuery.docs[0].data() as Map<String, dynamic>;
     account_holder = (document)['name'];
     customer_info = Customer.fromMap(document);
     String documentId1 = customerQuery.docs[0].id;
-    print("Document ID1: $documentId1");
 
-    // first create "account" in firebase
     CollectionReference account = FirebaseFirestore.instance.collection('accounts');
-    QuerySnapshot accountQuery = await account
-        .where('customer_ID', isEqualTo: CustId)
-        .get();
+    QuerySnapshot accountQuery = await account.where('customer_ID', isEqualTo: CustId).get();
     String documentId = accountQuery.docs[0].id;
 
     final document1 = accountQuery.docs[0].data() as Map;
     account_info = Account.fromMap(document1);
-    print("Document ID: $documentId");
-    print(document1);
-
-
   }
 
   @override
   void initState() {
     setvariables();
   }
+
   bool isAccountDetailsExpanded = false;
 
   Future<Customer> fetchuserdata() async {
     CollectionReference customer = FirebaseFirestore.instance.collection('customers');
-    QuerySnapshot customerQuery = await customer
-        .where('customerID', isEqualTo: CustId)
-        .get();
-    final document = customerQuery.docs[0].data() as Map<String,dynamic>;
+    QuerySnapshot customerQuery = await customer.where('customerID', isEqualTo: CustId).get();
+    final document = customerQuery.docs[0].data() as Map<String, dynamic>;
     final data = Customer.fromMap(document);
     return data;
   }
-  @override
-  Widget build(BuildContext context){
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('BankEase'),//bharat national bank
+        title: const Text('BankEase'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.account_circle_outlined),
-            onPressed: ()async {
+            icon: const Icon(Icons.account_circle_outlined),
+            onPressed: () async {
               Customer customer = await fetchuserdata();
               Navigator.pushNamed(context, '/profile', arguments: customer);
-              //Navigator.pushNamed(context, '/profile');
             },
           ),
           IconButton(
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             onPressed: () {
               Navigator.pushNamed(context, '/updateProfile');
             },
@@ -98,7 +86,7 @@ class _HomeState extends State<Home> {
                   color: Colors.blue,
                 ),
                 child: Text(
-                  'Bank_Ease(Bharat Nation bank)',
+                  'Bharat Nation Bank',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -106,20 +94,18 @@ class _HomeState extends State<Home> {
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.account_balance_wallet),
-                title: Text('Account Details'),
+                leading: const Icon(Icons.account_balance_wallet),
+                title: const Text('Account Details'),
                 onTap: () {
-                  // Toggle account details
                   setState(() {
                     isAccountDetailsExpanded = !isAccountDetailsExpanded;
                   });
                 },
               ),
               ListTile(
-                leading: Icon(Icons.history),
-                title: Text('Transaction History'),
+                leading: const Icon(Icons.history),
+                title: const Text('Transaction History'),
                 onTap: () {
-                  // Navigate to transaction history page
                   Navigator.pushNamed(context, '/transactionHistory');
                 },
               ),
@@ -128,11 +114,10 @@ class _HomeState extends State<Home> {
         ),
       ),
       body: SingleChildScrollView(
-        // Wrap with SingleChildScrollView
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Card(
@@ -140,7 +125,7 @@ class _HomeState extends State<Home> {
                 child: Column(
                   children: <Widget>[
                     ListTile(
-                      title: Text(
+                      title: const Text(
                         'Account Details',
                         style: TextStyle(
                           fontSize: 20,
@@ -148,57 +133,53 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       trailing: AnimatedSwitcher(
-                        duration: Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 300),
                         transitionBuilder: (child, animation) {
                           return ScaleTransition(
                             scale: animation,
                             child: child,
                           );
                         },
-                        child: isAccountDetailsExpanded ? Icon(
+                        child: isAccountDetailsExpanded
+                            ? const Icon(
                           Icons.keyboard_arrow_up,
                           key: Key('up'),
                         )
-                            : Icon(
+                            : const Icon(
                           Icons.keyboard_arrow_down,
                           key: Key('down'),
                         ),
                       ),
                       onTap: () {
-                        // Toggle account details
                         setState(() {
                           isAccountDetailsExpanded = !isAccountDetailsExpanded;
                         });
                       },
                     ),
                     AnimatedContainer(
-                      duration: Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 300),
                       height: isAccountDetailsExpanded ? 300 : 0,
                       child: SingleChildScrollView(
                         child: Column(
                           children: <Widget>[
                             ListTile(
-                              leading: Icon(Icons.account_circle),
-                              title: Text('Account Holder'),
-                              //subtitle: Text(customer_info.name.toString()),
+                              leading: const Icon(Icons.account_circle),
+                              title: const Text('Account Holder'),
                               subtitle: Text(customer_info.name.toString()),
                             ),
                             ListTile(
-                              leading: Icon(Icons.account_balance),
-                              title: Text('Account Number'),
-                              //subtitle: Text(account_info.account_no.toString()),
+                              leading: const Icon(Icons.account_balance),
+                              title: const Text('Account Number'),
                               subtitle: Text(account_info.account_no.toString()),
                             ),
                             ListTile(
-                              leading: Icon(Icons.credit_card),
-                              title: Text('Card Number'),
-                              //subtitle: Text(account_info.debit_card_no.toString()),
+                              leading: const Icon(Icons.credit_card),
+                              title: const Text('Card Number'),
                               subtitle: Text(account_info.debit_card_no.toString()),
                             ),
                             ListTile(
-                              leading: Icon(Icons.currency_rupee_rounded),
-                              title: Text('Balance'),
-                              //subtitle: Text(account_info.balance.toString()),
+                              leading: const Icon(Icons.currency_rupee_rounded),
+                              title: const Text('Balance'),
                               subtitle: Text(account_info.balance.toString()),
                             ),
                           ],
@@ -209,67 +190,122 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            const SizedBox(height: 20),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/genrate_qr');
-                    // Add transfer money functionality here
-                  },
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: Size(185.0, 35.0),
-                    backgroundColor: Colors.black,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/genrate_qr');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(220.0, 65.0),  // Same size for all buttons
+                      side: BorderSide(color: Colors.blueAccent, width: 3),  // Thick blue border
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),  // Slight rounding
+                      ),
+                      elevation: 5,  // Lower shadow
+                      shadowColor: Colors.grey.withOpacity(0.5),  // Slight shadow
+                    ),
+                    icon: Icon(Icons.qr_code, color: Colors.black),  // Icon color black
+                    label: Text(
+                      'QR Code',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20.0,  // Larger font size
+                          fontWeight: FontWeight.bold,
+                      ),  // Set font color to black
+                    ),
                   ),
-                  icon: Icon(Icons.qr_code),
-                  label: Text('QR Code'),
                 ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/scan_qr');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: Size(200.0, 35.0),
-                    backgroundColor: Colors.black,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/scan_qr');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(220.0, 65.0),  // Same size
+                      side: BorderSide(color: Colors.blueAccent, width: 3),  // Thick blue border
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),  // Slight rounding
+                      ),
+                      elevation: 5,  // Lower shadow
+                      shadowColor: Colors.grey.withOpacity(0.5),  // Slight shadow
+                    ),
+                    icon: Icon(Icons.qr_code_scanner, color: Colors.black),  // Icon color black
+                    label: Text(
+                      'Scan & Pay',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20.0,  // Larger font size
+                          fontWeight: FontWeight.bold,
+                      ),  // Set font color to black
+                    ),
                   ),
-                  icon: Icon(Icons.qr_code_scanner),
-                  label: Text('Scan & Pay'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/transaction');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(220.0, 65.0),  // Same size
+                      side: BorderSide(color: Colors.blueAccent, width: 3),  // Thick blue border
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),  // Slight rounding
+                      ),
+                      elevation: 5,  // Lower shadow
+                      shadowColor: Colors.grey.withOpacity(0.5),  // Slight shadow
+                    ),
+                    icon: Icon(Icons.send, color: Colors.black),  // Icon color black
+                    label: Text(
+                      'Transfer Money',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20.0,  // Larger font size
+                          fontWeight: FontWeight.bold,
+                      ),  // Set font color to black
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/transactionHistory');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(220.0, 65.0),  // Same size
+                      side: BorderSide(color: Colors.blueAccent, width: 3),  // Thick blue border
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),  // Slight rounding
+                      ),
+                      elevation: 5,  // Lower shadow
+                      shadowColor: Colors.grey.withOpacity(0.5),  // Slight shadow
+                    ),
+                    icon: Icon(Icons.history, color: Colors.black),  // Icon color black
+                    label: Text(
+                      'Transaction History',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20.0,  // Larger font size
+                          fontWeight: FontWeight.bold,
+                      ),  // Set font color to black
+                    ),
+                  ),
                 ),
               ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                ElevatedButton.icon(
-                  onPressed: () {
+            )
 
-                    Navigator.pushNamed(context, '/transaction');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: Size(185.0, 35.0),
-                    backgroundColor: Colors.black,
-                  ),
-                  icon: Icon(Icons.send),
-                  label: Text('Transfer Money'),
-                ),
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: Size(200.0, 35.0),
-                    backgroundColor: Colors.black,
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/transactionHistory');
-                  },
-                  icon: Icon(Icons.history),
-                  label: Text('Transaction History'),
-                ),
-              ],
-            ),
+
+
           ],
         ),
       ),
     );
   }
-
 }

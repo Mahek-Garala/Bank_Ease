@@ -293,11 +293,19 @@ class _TransactionPageState extends State<TransactionPage> {
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.7,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.blueAccent, // Your border color
+                width: 2.0, // Border width
+              ),
+              borderRadius: BorderRadius.circular(8.0), // Same border radius as Card
+            ),
+
+            height: MediaQuery.of(context).size.height * 0.6,
             child: Card(
               elevation: 4.0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
+                borderRadius: BorderRadius.circular(8.0),
               ),
               child: Padding(
                 padding: EdgeInsets.all(16.0),
@@ -362,8 +370,9 @@ class _TransactionPageState extends State<TransactionPage> {
                           child: Text(
                             'Send',
                             style: TextStyle(
-                              fontSize: 18.0,
+                              fontSize: 22.0,
                               fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -374,8 +383,9 @@ class _TransactionPageState extends State<TransactionPage> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
 
+                        // side: BorderSide(color: Colors.blueAccent, width: 2.5), // Border for button
 
-                        backgroundColor: Colors.black,
+                        backgroundColor: Colors.blueAccent,
 
                       ),
                     ),
