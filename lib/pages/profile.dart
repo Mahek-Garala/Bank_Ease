@@ -13,6 +13,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     final data = ModalRoute.of(context)?.settings.arguments as Customer;
+    //database ma add kari de
     final baseurl = "assets/images/";
     final fullurl = data.url;
 

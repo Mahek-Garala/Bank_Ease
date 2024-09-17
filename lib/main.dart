@@ -6,6 +6,9 @@ import 'package:bank_ease/pages/login.dart';
 import 'package:bank_ease/pages/home.dart';
 import 'package:bank_ease/pages/QrPay.dart';
 import 'package:bank_ease/pages/QrPayment.dart';
+import 'package:bank_ease/pages/transaction.dart';
+import 'package:bank_ease/pages/profile.dart';
+import 'package:bank_ease/pages/UpdateProfile.dart';
 import 'package:bank_ease/pages/QrScannerOverlay.dart';
 import 'package:bank_ease/pages/generateqrcode.dart';
 import 'package:bank_ease/pages/scanqr.dart';
@@ -37,11 +40,11 @@ void main() async{
         '/sign_up': (context) => const Signup(),
         '/home': (context) => const Home(),
         '/genrate_qr': (context) => GenerateQRCode(),
-        // '/profile': (context) => Profile(),
-        // '/transaction': (context) => TransactionPage(),
+        '/profile': (context) => Profile(),
+        '/transaction': (context) => TransactionPage(),
         '/scan_qr': (context) => const Scanqr(),
         '/transactionHistory' : (context) => const transactionHistory(),
-        // '/updateProfile' : (context) => UpdateProfilePage(),
+        '/updateProfile' : (context) => UpdateProfilePage(),
         '/qr_payment' : (context) => QRPayment(),
         '/qr_pay' : (context) => QrPay(),
       }

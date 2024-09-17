@@ -84,7 +84,7 @@ class _HomeState extends State<Home> {
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () {
-              //Navigator.pushNamed(context, '/updateProfile');
+              Navigator.pushNamed(context, '/updateProfile');
             },
           ),
         ],
@@ -120,7 +120,7 @@ class _HomeState extends State<Home> {
                 title: Text('Transaction History'),
                 onTap: () {
                   // Navigate to transaction history page
-                  //Navigator.pushNamed(context, '/transactionHistory');
+                  Navigator.pushNamed(context, '/transactionHistory');
                 },
               ),
             ],
@@ -244,7 +244,7 @@ class _HomeState extends State<Home> {
                 ElevatedButton.icon(
                   onPressed: () {
 
-                    //Navigator.pushNamed(context, '/transaction');
+                    Navigator.pushNamed(context, '/transaction');
                   },
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(185.0, 35.0),
