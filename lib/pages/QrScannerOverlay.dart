@@ -1,3 +1,10 @@
+// QRScannerOverlay creates a full-screen overlay with a rectangular cut-out (rounded corners) for the scanning area.
+// BorderPainter is responsible for drawing white borders around the scanning area.
+// OverlayWithHolePainter provides an alternative overlay with a circular hole (though not used in the main widget).
+// The overall effect gives users a clear indication of where the QR code should be positioned during scanning,
+// improving the user experience when scanning QR codes in the app.
+
+
 import 'package:flutter/material.dart';
 
 class QRScannerOverlay extends StatelessWidget {
@@ -16,13 +23,13 @@ class QRScannerOverlay extends StatelessWidget {
       ColorFiltered(
         colorFilter: ColorFilter.mode(
             overlayColour, BlendMode.srcOut), // This one will create the magic
-        child: Stack(
+        child: Stack( // used to overlay widgets on top of each other.
           children: [
             Container(
               decoration: const BoxDecoration(
                   color: Colors.red,
-                  backgroundBlendMode: BlendMode
-                      .dstOut), // This one will handle background + difference out
+                  backgroundBlendMode: BlendMode.dstOut), // This one will handle background + difference out
+              // makes the inner part of the container transparent, achieving the "hole" in the overlay.
             ),
             Align(
               alignment: Alignment.center,
@@ -145,7 +152,4 @@ bool shouldRepaint(CustomPainter oldDelegate) {
   return false;
 }
 
-// QRScannerOverlay creates a full-screen overlay with a rectangular cut-out (rounded corners) for the scanning area.
-// BorderPainter is responsible for drawing white borders around the scanning area.
-// OverlayWithHolePainter provides an alternative overlay with a circular hole (though not used in the main widget).
-// The overall effect gives users a clear indication of where the QR code should be positioned during scanning, improving the user experience when scanning QR codes in the app.
+

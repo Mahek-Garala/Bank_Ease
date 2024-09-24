@@ -510,7 +510,7 @@ class _QRPaymentState extends State<QRPayment> {
                       print(_amount.text);
                       VerifyAmount();
                       if (isAmountValid) {
-                        Navigator.pushNamed(context, '/qr_pay', arguments: {'amount': _amount.text, 'remark': _remark.text, 'reciver_Cust': QrData});
+                        Navigator.pushReplacementNamed(context, '/qr_pay', arguments: {'amount': _amount.text, 'remark': _remark.text, 'reciver_Cust': QrData});
                       }
                     },
                     child: const Text(

@@ -1,12 +1,11 @@
 // The GenerateQRCode class fetches customer data from SharedPreferences and Firestore.
 // A QR code is generated using the CustId and displayed in the UI.
-// This page can be navigated to from anywhere in the app where the user might want to generate and display their QR code for payment purposes.
+// This page can be navigated to from anywhere in the app where
+// the user might want to generate and display their QR code for payment purposes.
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:bank_ease/models/account.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:bank_ease/models/customers.dart';
 
@@ -21,7 +20,6 @@ class GenerateQRCode extends StatefulWidget {
 class _GenerateQRCodeState extends State<GenerateQRCode> {
 
   //final Account account;
-
   //final Customer customer;
   //GenerateQRCode(this.customer);
 
@@ -55,10 +53,6 @@ class _GenerateQRCodeState extends State<GenerateQRCode> {
       print("No customer found with the provided CustId: $CustId");
       account_holder = "Unknown"; // Or set a default value
     }
-
-
-    // pref.setString('name', customerName);
-    // pref.setString('id', customerId);
   }
 
   @override

@@ -179,7 +179,10 @@ class _LoginPageState extends State<LoginPage> {
                           height: 50,
                           child: ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.black,
+                                backgroundColor: Colors.blueAccent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
                               ),
                               onPressed: () async {
                                 //authentication thru fingerprint
@@ -195,8 +198,9 @@ class _LoginPageState extends State<LoginPage> {
                               label: Text(
                                 "Authenticate",
                                 style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22.0,
+                                  color:Colors.white
                                 ),
                               )),
                         ),
@@ -205,7 +209,10 @@ class _LoginPageState extends State<LoginPage> {
                           height: 45,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
+                              backgroundColor: Colors.blueAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
                             ),
                             onPressed: () async {
                               if (_formkey.currentState!.validate()) {
@@ -219,12 +226,26 @@ class _LoginPageState extends State<LoginPage> {
                             child: const Text(
                               'Login',
                               style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22.0,
+                                color:Colors.white
                               ),
                             ),
                           ),
                         ),
+                        TextButton(
+                          onPressed: (){
+                            Navigator.pushReplacementNamed(context, '/sign_up');
+                          },
+                          child:Text(
+                            'Forget pin?',
+                            style:TextStyle(
+                              fontSize: 16.0,
+                              color:Colors.blueAccent,
+                              decoration: TextDecoration.underline
+                            )
+                          )
+                        )
                       ],
                     ),
                   ),

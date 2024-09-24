@@ -49,6 +49,7 @@ class _SignupState extends State<Signup> {
         pref.setString('name', customer['name']);
         pref.setString('id', customer['customerID']);
         showSnackBar(context, "Customer Updated Succssefully..");
+        await AuthMethod().SetTransactionPin(customer['customerID'],setpinController.text);
         Navigator.pushReplacementNamed(context,'/login_page',arguments: {'id': customer['name'] , 'name':customer['customerID']});
       }else{
         showSnackBar(context, "Customer not Found..");
@@ -123,7 +124,10 @@ class _SignupState extends State<Signup> {
                 SizedBox(height: 16.0),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
+                    backgroundColor: Colors.blueAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
                   ),
                   onPressed:() async {
                     if (_formKey.currentState!.validate()) {
@@ -142,7 +146,12 @@ class _SignupState extends State<Signup> {
                       }
                     }
                   },
-                  child: Text("Set PIN"),
+                  child: Text("Set PIN",
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),),
                 ),
                 SizedBox(height: 16.0),
                 SizedBox(height: 16.0),
@@ -179,7 +188,10 @@ class _SignupState extends State<Signup> {
                 if (verifyOtpField)
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
+                      backgroundColor: Colors.blueAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -188,6 +200,7 @@ class _SignupState extends State<Signup> {
                         if(setpinController.text == confirmsetpinController.text)
                         {
                           setPin();
+
                         }
                         else
                         {
@@ -198,7 +211,12 @@ class _SignupState extends State<Signup> {
                         }
                       }
                     },
-                    child: Text("Sign Up"),
+                    child: Text("Sign Up",
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),),
                   ),
               ],
             ),

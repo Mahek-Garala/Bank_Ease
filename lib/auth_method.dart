@@ -59,5 +59,25 @@ class AuthMethod{
 
   }
 
+  Future<void> SetTransactionPin(String customerID, String pin) async {
+    try {
+      int transactionPin = int.parse(pin);
+      final QuerySnapshot<Object?> querySnapshot = await _firestore.collection('accounts').where('customer_ID', isEqualTo: customerID).get();
+      print('Query snapshot docs: ${querySnapshot.docs}');
+      if (querySnapshot.docs.isNotEmpty) {
+        final DocumentReference documentRef = querySnapshot.docs[0].reference;
+        final account = querySnapshot.docs[0].data() as Map<String, dynamic>;
+        print('Account data: $account');
+        await documentRef.update({
+          'transaction_pin': transactionPin,
+        });
+      } else {
+        print('No matching account found for customer ID: $customerID');
+      }
+    } catch (error) {
+      print('Error: ${error.toString()}');
+    }
+  }
+
 }
 

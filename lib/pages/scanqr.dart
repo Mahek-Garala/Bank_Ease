@@ -6,9 +6,6 @@
 
 // Once the QR code is scanned, the app extracts the QR data and navigates to the payment processing stage (QRPayment screen). This second part is the payment handling after the QR code has been scanned. The scanned data (likely containing payment details) is passed to the next page, where the payment logic will be implemented.
 
-// Scanqr Widget: Provides the interface for scanning QR codes and displays an overlay using the MobileScanner.
-// QRScannerOverlay: Custom overlay used for enhancing user experience by guiding them to the correct scanning area.
-// QR Code Detection: After detecting the QR code, the app navigates to the payment page (/qr_payment), passing the QR code data for further processing.
 
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -92,9 +89,7 @@ class _ScanqrState extends State<Scanqr> {
                             // Navigate to the QRPayment page and pass the scanned QR code data
 
                             isScanCompleted = false;
-                            Navigator.pushNamed(context, '/qr_payment',arguments: {
-                              'qrCodeData' : qrCodeData
-                            });
+                            Navigator.pushReplacementNamed(context, '/qr_payment',arguments: {'qrCodeData' : qrCodeData});
                             isScanCompleted = true;
                           }
                         }

@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bank_ease/auth_method.dart';
+
+import '../models/customers.dart';
 
 class UpdateProfilePage extends StatefulWidget {
   @override
@@ -8,15 +11,29 @@ class UpdateProfilePage extends StatefulWidget {
 }
 
 class _UpdateProfilePageState extends State<UpdateProfilePage> {
+
   TextEditingController _emailController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
+
 
   String customerId = "";
   void loadData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       customerId = pref.getString('id')!;
+    });
+    await setController();
+  }
+  Future<void> setController() async{
+    CollectionReference customer = FirebaseFirestore.instance.collection('customers');
+    QuerySnapshot customerQuery = await customer.where('customerID', isEqualTo: customerId).get();
+    final document = customerQuery.docs[0].data() as Map<String, dynamic>;
+    final data = Customer.fromMap(document);
+    setState(() {
+      _emailController.text = data.email??"";
+      _addressController.text = data.address??"";
+      _mobileController.text = data.mobileNo.toString()??"";
     });
   }
 

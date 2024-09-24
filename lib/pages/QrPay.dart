@@ -178,7 +178,7 @@ class _QrPayState extends State<QrPay> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    Navigator.pushReplacementNamed(context, '/transactionHistory');
+                    Navigator.pushReplacementNamed(context, '/home');
                   },
                   child: Text('OK'),
                 ),

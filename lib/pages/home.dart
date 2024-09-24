@@ -31,13 +31,12 @@ class _HomeState extends State<Home> {
     final document = customerQuery.docs[0].data() as Map<String, dynamic>;
     account_holder = (document)['name'];
     customer_info = Customer.fromMap(document);
-    String documentId1 = customerQuery.docs[0].id;
+    //String documentId1 = customerQuery.docs[0].id;
 
     CollectionReference account = FirebaseFirestore.instance.collection('accounts');
     QuerySnapshot accountQuery = await account.where('customer_ID', isEqualTo: CustId).get();
-    String documentId = accountQuery.docs[0].id;
-
-    final document1 = accountQuery.docs[0].data() as Map;
+    //String documentId = accountQuery.docs[0].id;
+    final document1 = accountQuery.docs[0].data() as Map<dynamic,dynamic>;
     account_info = Account.fromMap(document1);
   }
 
@@ -45,7 +44,14 @@ class _HomeState extends State<Home> {
   void initState() {
     setvariables();
   }
-
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // setVariables().then((_) {
+    //   setState(() {}); // Trigger a rebuild after setting variables
+    // });
+    setvariables(); // Fetch latest account details, including balance
+  }
   bool isAccountDetailsExpanded = false;
 
   Future<Customer> fetchuserdata() async {
@@ -83,7 +89,7 @@ class _HomeState extends State<Home> {
             children: <Widget>[
               const DrawerHeader(
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Colors.blueAccent,
                 ),
                 child: Text(
                   'Bharat Nation Bank',
@@ -97,6 +103,7 @@ class _HomeState extends State<Home> {
                 leading: const Icon(Icons.account_balance_wallet),
                 title: const Text('Account Details'),
                 onTap: () {
+                  Navigator.of(context).pop(); // This will close the drawer
                   setState(() {
                     isAccountDetailsExpanded = !isAccountDetailsExpanded;
                   });
@@ -106,6 +113,7 @@ class _HomeState extends State<Home> {
                 leading: const Icon(Icons.history),
                 title: const Text('Transaction History'),
                 onTap: () {
+                  Navigator.of(context).pop();
                   Navigator.pushNamed(context, '/transactionHistory');
                 },
               ),
