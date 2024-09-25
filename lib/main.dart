@@ -43,7 +43,7 @@ void main() async{
         '/profile': (context) => Profile(),
         '/transaction': (context) => TransactionPage(),
         '/scan_qr': (context) => const Scanqr(),
-        '/transactionHistory' : (context) => const transactionHistory(),
+        '/transactionHistory' : (context) => const TransactionHistory(),
         '/updateProfile' : (context) => UpdateProfilePage(),
         '/qr_payment' : (context) => QRPayment(),
         '/qr_pay' : (context) => QrPay(),

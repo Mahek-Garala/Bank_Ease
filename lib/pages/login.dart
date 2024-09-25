@@ -4,7 +4,6 @@ import 'package:bank_ease/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localstorage/localstorage.dart';
-// import 'package:bank_ease/pages/authentication.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -109,8 +108,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    data =
-    data.isEmpty ? ModalRoute.of(context)?.settings.arguments as Map : data;
+    data = data.isEmpty ? ModalRoute.of(context)?.settings.arguments as Map : data;
     print(data);
     return Scaffold(
       appBar: AppBar(
@@ -186,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               onPressed: () async {
                                 //authentication thru fingerprint
-                                bool auth = await authentication(); //hardcoded
+                                bool auth = await authentication();
                                 print("can authenticate: $auth");
                                 if (auth) {
                                   Navigator.pushReplacementNamed(
@@ -234,11 +232,13 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         TextButton(
-                          onPressed: (){
-                            Navigator.pushReplacementNamed(context, '/sign_up');
+                          onPressed: () async {
+                            SharedPreferences pref = await SharedPreferences.getInstance();
+                            await pref.clear(); // Clears all the stored data
+                            Navigator.pushReplacementNamed(context, '/');
                           },
                           child:Text(
-                            'Forget pin?',
+                            'Forget pin? / SignUp',
                             style:TextStyle(
                               fontSize: 16.0,
                               color:Colors.blueAccent,

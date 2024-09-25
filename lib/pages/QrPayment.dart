@@ -316,7 +316,6 @@ class _QRPaymentState extends State<QRPayment> {
     Data = ModalRoute.of(context)?.settings.arguments as Map; //{'qrCodeData':"111111"};
     print(Data);
     QrData = Data['qrCodeData'];
-
     final pref = await SharedPreferences.getInstance();
     name1 = pref.getString('name') ?? '';
     CustId = pref.getString('id') ?? '';

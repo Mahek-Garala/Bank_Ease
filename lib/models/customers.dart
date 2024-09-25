@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Customer {
   String? address;
   String? dob;
@@ -25,7 +23,7 @@ class Customer {
     required this.url
   });
 
-  static Customer fromMap(Map<String, dynamic> map) {
+  factory Customer.fromMap(Map<String, dynamic> map) {
     return Customer(
       address: map['address'],
       dob: map['dob'],

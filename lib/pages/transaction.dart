@@ -40,7 +40,7 @@ Future<void> initializevalues()async {
   QuerySnapshot accountQuery = await account
       .where('customer_ID', isEqualTo: CustId)
       .get();
-  final document1 = accountQuery.docs[0].data() as Map;
+  final document1 = accountQuery.docs[0].data() as Map<dynamic,dynamic>;
   account_info = Account.fromMap(document1);
   sender_account_no = account_info.account_no!;
   print(sender_account_no);
@@ -74,7 +74,7 @@ class _TransactionPageState extends State<TransactionPage> {
     super.initState();
 
     initializevalues().then((_) {
-      ;
+
       setState(() {
         senderValidationMessage;
 

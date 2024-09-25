@@ -2,7 +2,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:email_otp/email_otp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bank_ease/pages/Loading.dart';
 import 'package:auth_handler/auth_handler.dart';
@@ -27,6 +26,7 @@ class _SignupState extends State<Signup> {
   TextEditingController customerIdController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
   Future <String?> loginCustomer(String customerId) async {
     try{
       var res = await AuthMethod().getCustomer(customerId);
@@ -46,11 +46,12 @@ class _SignupState extends State<Signup> {
       Map<dynamic,dynamic>? customer =  await AuthMethod().savepin(customerIdController.text,setpinController.text);
       if(customer != null){
         SharedPreferences pref = await SharedPreferences.getInstance();
+        //set data in SharedPreferences
         pref.setString('name', customer['name']);
         pref.setString('id', customer['customerID']);
         showSnackBar(context, "Customer Updated Succssefully..");
         await AuthMethod().SetTransactionPin(customer['customerID'],setpinController.text);
-        Navigator.pushReplacementNamed(context,'/login_page',arguments: {'id': customer['name'] , 'name':customer['customerID']});
+        Navigator.pushReplacementNamed(context,'/login_page',arguments: {'name': customer['name'] , 'id':customer['customerID']});
       }else{
         showSnackBar(context, "Customer not Found..");
       }
@@ -74,13 +75,6 @@ class _SignupState extends State<Signup> {
   void initState() {
     super.initState();
     // Initialize the package
-
-    /*authHandler.config(
-      senderEmail: "bharatnationalbank@gmail.com",
-      senderName: "BHARAT NATIONAL BANK",
-      otpLength: 4,
-    );*/
-
   }
 
   @override
@@ -104,7 +98,8 @@ class _SignupState extends State<Signup> {
                   controller: emailController,
                   decoration: InputDecoration(labelText: 'Email'),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {return 'Email is required';
+                    if (value == null || value.isEmpty) {
+                      return 'Email is required';
                     }
                     // Add more complex email validation logic here if needed
                     return null;
@@ -131,6 +126,7 @@ class _SignupState extends State<Signup> {
                   ),
                   onPressed:() async {
                     if (_formKey.currentState!.validate()) {
+                      //return email if customer exist
                       final email = await loginCustomer(customerIdController.text);
                       if (email == emailController.text.trim()) {
                         setState(() {
@@ -141,8 +137,7 @@ class _SignupState extends State<Signup> {
                             .showSnackBar(const SnackBar(
                           content: Text("Enter correct details."),
                         ));
-                        // Implement OTP verification and signup logic here
-                        // You can compare otpController.text with the expected OTP
+
                       }
                     }
                   },
@@ -200,7 +195,6 @@ class _SignupState extends State<Signup> {
                         if(setpinController.text == confirmsetpinController.text)
                         {
                           setPin();
-
                         }
                         else
                         {

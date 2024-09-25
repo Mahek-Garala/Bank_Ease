@@ -5,6 +5,7 @@ import 'package:bank_ease/pages/signup.dart';
 
 class AuthMethod{
   final FirebaseFirestore _firestore  = FirebaseFirestore.instance;
+
   Future <Map<String, dynamic>?> getCustomer(String customerid) async {
     try{
       var doc = await _firestore.collection("customers").get();
@@ -66,7 +67,7 @@ class AuthMethod{
       print('Query snapshot docs: ${querySnapshot.docs}');
       if (querySnapshot.docs.isNotEmpty) {
         final DocumentReference documentRef = querySnapshot.docs[0].reference;
-        final account = querySnapshot.docs[0].data() as Map<String, dynamic>;
+        final account = querySnapshot.docs[0].data() as Map<dynamic, dynamic>;
         print('Account data: $account');
         await documentRef.update({
           'transaction_pin': transactionPin,
