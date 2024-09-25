@@ -4,15 +4,14 @@ import 'package:bank_ease/models/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Widget _buildTextField(
-    TextEditingController controller,
-    String label,
-    {
-      bool obscureText = false,
-      TextInputType keyboardType = TextInputType.text,
-      FocusNode? focusNode,
-      String? errorText,
-      bool enabled = true, // Add this parameter for enabling/disabling the field
-    }) {
+  TextEditingController controller,
+  String label, {
+  bool obscureText = false,
+  TextInputType keyboardType = TextInputType.text,
+  FocusNode? focusNode,
+  String? errorText,
+  bool enabled = true, // Add this parameter for enabling/disabling the field
+}) {
   return TextFormField(
     controller: controller,
     decoration: InputDecoration(
@@ -33,14 +32,14 @@ Widget _buildTextField(
 Account account_info = Account.nothing();
 String sender_account_no = "";
 
-Future<void> initializevalues()async {
+Future<void> initializevalues() async {
   final pref = await SharedPreferences.getInstance();
   final CustId = pref.getString('id') ?? '';
-  CollectionReference account = FirebaseFirestore.instance.collection('accounts');
-  QuerySnapshot accountQuery = await account
-      .where('customer_ID', isEqualTo: CustId)
-      .get();
-  final document1 = accountQuery.docs[0].data() as Map<dynamic,dynamic>;
+  CollectionReference account =
+      FirebaseFirestore.instance.collection('accounts');
+  QuerySnapshot accountQuery =
+      await account.where('customer_ID', isEqualTo: CustId).get();
+  final document1 = accountQuery.docs[0].data() as Map<dynamic, dynamic>;
   account_info = Account.fromMap(document1);
   sender_account_no = account_info.account_no!;
   print(sender_account_no);
@@ -52,7 +51,6 @@ class TransactionPage extends StatefulWidget {
 }
 
 class _TransactionPageState extends State<TransactionPage> {
-
   TextEditingController senderAccountController = TextEditingController();
   TextEditingController receiverAccountController = TextEditingController();
   TextEditingController amountController = TextEditingController();
@@ -68,13 +66,11 @@ class _TransactionPageState extends State<TransactionPage> {
   String? amountValidationMessage;
   String? pinValidationMessage;
 
-
   @override
   void initState() {
     super.initState();
 
     initializevalues().then((_) {
-
       setState(() {
         senderValidationMessage;
 
@@ -109,7 +105,7 @@ class _TransactionPageState extends State<TransactionPage> {
       }
 
       CollectionReference senderAccounts =
-      FirebaseFirestore.instance.collection('accounts');
+          FirebaseFirestore.instance.collection('accounts');
       // Query the Firestore collection for a specific document based on sender account number
       QuerySnapshot accountQuery = await senderAccounts
           .where('account_no', isEqualTo: accountNumber)
@@ -148,7 +144,7 @@ class _TransactionPageState extends State<TransactionPage> {
       }
 
       CollectionReference receiverAccounts =
-      FirebaseFirestore.instance.collection('accounts');
+          FirebaseFirestore.instance.collection('accounts');
 
       // Query the Firestore collection for a specific document based on receiver account number
       QuerySnapshot accountQuery = await receiverAccounts
@@ -179,10 +175,10 @@ class _TransactionPageState extends State<TransactionPage> {
     // For example, check if it's a valid numeric value
     try {
       CollectionReference account =
-      FirebaseFirestore.instance.collection('accounts');
+          FirebaseFirestore.instance.collection('accounts');
       int parsedAmount = int.parse(amount);
       QuerySnapshot accountQuery =
-      await account.where('account_no', isEqualTo: accountNumber).get();
+          await account.where('account_no', isEqualTo: accountNumber).get();
       if (parsedAmount <= 0) {
         setState(() {
           amountValidationMessage = "Amount must be non-negative.";
@@ -213,16 +209,16 @@ class _TransactionPageState extends State<TransactionPage> {
     final parsedpin = int.parse(transactionPin);
     DateTime now = new DateTime.now();
     CollectionReference account =
-    FirebaseFirestore.instance.collection('accounts');
+        FirebaseFirestore.instance.collection('accounts');
 
     QuerySnapshot sender_account =
-    await account.where('account_no', isEqualTo: senderAccount).get();
+        await account.where('account_no', isEqualTo: senderAccount).get();
     if (sender_account.docs.isNotEmpty) {
       final document = sender_account.docs[0].data();
       final pin = (document as Map)['transaction_pin'];
       if (pin == parsedpin) {
         CollectionReference transaction =
-        FirebaseFirestore.instance.collection('transaction');
+            FirebaseFirestore.instance.collection('transaction');
         await transaction.add({
           'sender_account_no': senderAccount,
           'receiver_account_no': receiverAccount,
@@ -236,7 +232,7 @@ class _TransactionPageState extends State<TransactionPage> {
 
         await sender_doc.update({'balance': rem_bal});
         QuerySnapshot receiver =
-        await account.where('account_no', isEqualTo: receiverAccount).get();
+            await account.where('account_no', isEqualTo: receiverAccount).get();
         final DocumentReference receiver_doc = receiver.docs[0].reference;
         final receiver_doc_data = receiver.docs[0].data();
         final receiver_bal = (receiver_doc_data as Map)['balance'];
@@ -260,8 +256,7 @@ class _TransactionPageState extends State<TransactionPage> {
                 ],
               );
             });
-      }
-      else {
+      } else {
         showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -289,107 +284,112 @@ class _TransactionPageState extends State<TransactionPage> {
         title: Text('Transaction Page'),
       ),
       resizeToAvoidBottomInset: true,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.blueAccent, // Your border color
-                width: 2.0, // Border width
-              ),
-              borderRadius: BorderRadius.circular(8.0), // Same border radius as Card
-            ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.7, // Limit the height of the container
 
-            height: MediaQuery.of(context).size.height * 0.6,
-            child: Card(
-              elevation: 4.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
+              decoration: BoxDecoration(
+
+                border: Border.all(
+                  color: Colors.blueAccent, // Your border color
+                  width: 2.0, // Border width
+                ),
+                borderRadius:
+                    BorderRadius.circular(8.0), // Same border radius as Card
               ),
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    _buildTextField(
-                      senderAccountController,
-                      "Sender's Account No",
-                      keyboardType: TextInputType.number,
-                      focusNode: senderAccountFocus,
-                      errorText: senderValidationMessage,
-                      enabled: false, // Set the field as disabled
-                    ),
-                    SizedBox(height: 16.0),
-                    _buildTextField(
-                      receiverAccountController,
-                      "Receiver's Account No",
-                      keyboardType: TextInputType.number,
-                      focusNode: receiverAccountFocus,
-                      errorText: receiverValidationMessage,
-                    ),
-                    SizedBox(height: 16.0),
-                    _buildTextField(
-                      amountController,
-                      "Amount",
-                      keyboardType: TextInputType.number,
-                      focusNode: amountFocus,
-                      errorText: amountValidationMessage,
-                    ),
-                    SizedBox(height: 16.0),
-                    _buildTextField(remarkController, "Remark"),
-                    SizedBox(height: 16.0),
-                    _buildTextField(transactionPinController, "Transaction PIN",
+              child: Card(
+                elevation: 4.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      _buildTextField(
+                        senderAccountController,
+                        "Sender's Account No",
                         keyboardType: TextInputType.number,
-                        obscureText: true,
-                        errorText: pinValidationMessage),
-                    SizedBox(height: 20.0),
-                    ElevatedButton(
-                      onPressed: () async {
-                        // Handle the transaction here
-                        String senderAccount = senderAccountController.text;
-                        String receiverAccount = receiverAccountController.text;
-                        String amount = amountController.text;
-                        String remark = remarkController.text;
-                        String transactionPin = transactionPinController.text;
+                        focusNode: senderAccountFocus,
+                        errorText: senderValidationMessage,
+                        enabled: false, // Set the field as disabled
+                      ),
+                      SizedBox(height: 16.0),
+                      _buildTextField(
+                        receiverAccountController,
+                        "Receiver's Account No",
+                        keyboardType: TextInputType.number,
+                        focusNode: receiverAccountFocus,
+                        errorText: receiverValidationMessage,
+                      ),
+                      SizedBox(height: 16.0),
+                      _buildTextField(
+                        amountController,
+                        "Amount",
+                        keyboardType: TextInputType.number,
+                        focusNode: amountFocus,
+                        errorText: amountValidationMessage,
+                      ),
+                      SizedBox(height: 16.0),
+                      _buildTextField(remarkController, "Remark"),
+                      SizedBox(height: 16.0),
+                      _buildTextField(
+                          transactionPinController, "Transaction PIN",
+                          keyboardType: TextInputType.number,
+                          obscureText: true,
+                          errorText: pinValidationMessage),
+                      SizedBox(height: 20.0),
+                      ElevatedButton(
+                        onPressed: () async {
+                          // Handle the transaction here
+                          String senderAccount = senderAccountController.text;
+                          String receiverAccount =
+                              receiverAccountController.text;
+                          String amount = amountController.text;
+                          String remark = remarkController.text;
+                          String transactionPin = transactionPinController.text;
 
-                        // Add your transaction logic here
-                        await handlesubmit(senderAccount, receiverAccount,
-                            amount, remark, transactionPin);
+                          // Add your transaction logic here
+                          await handlesubmit(senderAccount, receiverAccount,
+                              amount, remark, transactionPin);
 
-                        // Print the input values for testing
-                        print("Sender's Account: $senderAccount");
-                        print("Receiver's Account: $receiverAccount");
-                        print("Amount: $amount");
-                        print("Remark: $remark");
-                        print("Transaction PIN: $transactionPin");
-                      },
-                      child: Container(
-                        height: 50.0,
-                        child: Center(
-                          child: Text(
-                            'Send',
-                            style: TextStyle(
-                              fontSize: 22.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                          // Print the input values for testing
+                          print("Sender's Account: $senderAccount");
+                          print("Receiver's Account: $receiverAccount");
+                          print("Amount: $amount");
+                          print("Remark: $remark");
+                          print("Transaction PIN: $transactionPin");
+                        },
+                        child: Container(
+                          height: 50.0,
+                          child: Center(
+                            child: Text(
+                              'Send',
+                              style: TextStyle(
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        elevation: 6.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
+                        style: ElevatedButton.styleFrom(
+                          elevation: 6.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+
+                          // side: BorderSide(color: Colors.blueAccent, width: 2.5), // Border for button
+
+                          backgroundColor: Colors.blueAccent,
                         ),
-
-                        // side: BorderSide(color: Colors.blueAccent, width: 2.5), // Border for button
-
-                        backgroundColor: Colors.blueAccent,
-
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

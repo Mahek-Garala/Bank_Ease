@@ -222,7 +222,7 @@ class _HomeState extends State<Home> {
                       'QR Code',
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: 20.0,  // Larger font size
+                          fontSize: 18.0,  // Larger font size
                           fontWeight: FontWeight.bold,
                       ),  // Set font color to black
                     ),
@@ -248,7 +248,7 @@ class _HomeState extends State<Home> {
                       'Scan & Pay',
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: 20.0,  // Larger font size
+                          fontSize: 18.0,  // Larger font size
                           fontWeight: FontWeight.bold,
                       ),  // Set font color to black
                     ),
@@ -274,7 +274,7 @@ class _HomeState extends State<Home> {
                       'Transfer Money',
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: 20.0,  // Larger font size
+                          fontSize: 18.0,  // Larger font size
                           fontWeight: FontWeight.bold,
                       ),  // Set font color to black
                     ),
@@ -300,7 +300,7 @@ class _HomeState extends State<Home> {
                       'Transaction History',
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: 20.0,  // Larger font size
+                          fontSize: 18.0,  // Larger font size
                           fontWeight: FontWeight.bold,
                       ),  // Set font color to black
                     ),
