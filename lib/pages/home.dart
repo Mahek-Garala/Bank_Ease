@@ -21,7 +21,7 @@ class _HomeState extends State<Home> {
   Customer customer_info = Customer.nothing();
   Account account_info = Account.nothing();
 
-  void setvariables() async {
+  Future<void> setvariables() async {
     super.initState();
     final pref = await SharedPreferences.getInstance();
     name1 = pref.getString('name') ?? '';
@@ -45,12 +45,12 @@ class _HomeState extends State<Home> {
     setvariables();
   }
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async{
     super.didChangeDependencies();
     // setVariables().then((_) {
     //   setState(() {}); // Trigger a rebuild after setting variables
     // });
-    setvariables(); // Fetch latest account details, including balance
+    await setvariables(); // Fetch latest account details, including balance
   }
   bool isAccountDetailsExpanded = false;
 
