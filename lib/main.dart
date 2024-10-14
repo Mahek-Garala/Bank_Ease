@@ -12,6 +12,7 @@ import 'package:bank_ease/pages/UpdateProfile.dart';
 import 'package:bank_ease/pages/QrScannerOverlay.dart';
 import 'package:bank_ease/pages/generateqrcode.dart';
 import 'package:bank_ease/pages/scanqr.dart';
+import 'package:bank_ease/pages/analysis.dart';
 import 'package:bank_ease/pages/transactionHistory.dart';
 import 'package:bank_ease/pages/profile.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -47,6 +48,7 @@ void main() async{
         '/updateProfile' : (context) => UpdateProfilePage(),
         '/qr_payment' : (context) => QRPayment(),
         '/qr_pay' : (context) => QrPay(),
+        '/analysis' : (context)=> TransactionAnalytics(),
       }
   ));
 }

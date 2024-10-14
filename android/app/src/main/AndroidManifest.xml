@@ -3,6 +3,7 @@
 <!--    <uses-permission android:name="android.permission.CAMERA"/>-->
 <!--    <uses-feature android:name="android.hardware.camera"/>-->
 
+
     <application
         android:label="bank_ease"
         android:name="${applicationName}"

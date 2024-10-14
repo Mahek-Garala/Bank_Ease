@@ -306,6 +306,32 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/analysis');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(220.0, 65.0),  // Same size
+                      side: BorderSide(color: Colors.blueAccent, width: 3),  // Thick blue border
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),  // Slight rounding
+                      ),
+                      elevation: 5,  // Lower shadow
+                      shadowColor: Colors.grey.withOpacity(0.5),  // Slight shadow
+                    ),
+                    icon: Icon(Icons.analytics , color: Colors.black),  // Icon color black
+                    label: Text(
+                      'Analytics',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18.0,  // Larger font size
+                        fontWeight: FontWeight.bold,
+                      ),  // Set font color to black
+                    ),
+                  ),
+                ),
               ],
             )
 
